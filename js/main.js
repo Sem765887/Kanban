@@ -11,11 +11,11 @@ new Vue({
             description: '',
             deadline: ''
         },
-        tasks: [], // Задачи
-        plannedTasks: [], // Запланированные задачи
-        inProgressTasks: [], // Задачи в работе
-        testingTasks: [], // Тестирование
-        completedTasks: [] // Выполненные задачи
+        tasks: [],
+        plannedTasks: [],
+        inProgressTasks: [],
+        testingTasks: [],
+        completedTasks: []
     },
     methods: {
         openForm() {
@@ -37,11 +37,14 @@ new Vue({
             this.saveData();
             this.closeForm();
         },
-
+        deleteTask(index, array) {
+            array.splice(index, 1);
+            this.saveData();
+        },
         startEdit(index, array) {
             this.editIndex = index;
             this.currentArray = array;
-            this.newTask = { ...array[index] }; // копируем текущую задачу для редактирования
+            this.newTask = { ...array[index] };
         },
         saveEdit() {
             if (this.editIndex !== null && this.currentArray) {
