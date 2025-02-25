@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kanban доска</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script defer src="js/main.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="column">
+        <h2>Задачи</h2>
+        <button @click="openForm()">Добавить карточку</button>
+        <form v-if="showForm" @submit.prevent="addTask">
+            <label for="title">Заголовок:</label>
+            <input type="text" id="title" v-model="newTask.title" required>
+            <label for="description">Описание:</label>
+            <textarea id="description" v-model="newTask.description" required></textarea>
+            <label for="deadline">Дедлайн:</label>
+            <input type="date" id="deadline" v-model="newTask.deadline" required>
+            <button type="submit">Создать задачу</button>
+            <button type="button" @click="closeForm()">Отмена</button>
+        </form>
+        <form v-if="editIndex !== null" @submit.prevent="saveEdit">
+            <label for="title-new">Заголовок:</label>
+            <input type="text" id="title-new" v-model="newTask.title" required>
+            <label for="description-new">Описание:</label>
+            <textarea id="description-new" v-model="newTask.description" required></textarea>
+            <label for="deadline-new">Дедлайн:</label>
+            <input type="date" id="deadline-new" v-model="newTask.deadline" required>
+            <button type="submit">Сохранить изменения</button>
+            <button type="button" @click="cancelEdit()">Отмена</button>
+        </form>
+        <div class="task" v-for="(task, index) in tasks" :key="index">
+            <p><strong>Дата создания:</strong> {{ task.createdAt }}</p>
+            <p v-if="task.lastEditedAt"><strong>Последнее редактирование:</strong> {{ task.lastEditedAt }}</p>
+            <p><strong>Заголовок:</strong> {{ task.title }}</p>
+            <p><strong>Описание:</strong> {{ task.description }}</p>
+            <p><strong>Дедлайн:</strong> {{ task.deadline }}</p>
+            <button @click="moveToPlanned(index)">Переместить в запланированные</button>
+            <button @click="startEdit(index, tasks)">Редактировать</button>
+            <button @click="deleteTask(index, tasks)">Удалить</button>
+        </div>
+    </div>
+    <div class="column">
+        <h2>Запланированные задачи</h2>
+        <div class="task" v-for="(task, index) in plannedTasks" :key="index">
+            <p><strong>Дата создания:</strong> {{ task.createdAt }}</p>
+            <p v-if="task.lastEditedAt"><strong>Последнее редактирование:</strong> {{ task.lastEditedAt }}</p>
+            <p><strong>Заголовок:</strong> {{ task.title }}</p>
+            <p><strong>Описание:</strong> {{ task.description }}</p>
+            <p><strong>Дедлайн:</strong> {{ task.deadline }}</p>
+            <button @click="moveToInProgress(index)">Переместить в работу</button>
+            <button @click="startEdit(index, plannedTasks)">Редактировать</button>
+            <button @click="deleteTask(index, plannedTasks)">Удалить</button>
+        </div>
+    </div>
+    <div class="column">
+        <h2>Задачи в работе</h2>
+        <div class="task" v-for="(task, index) in inProgressTasks" :key="index">
+            <p><strong>Дата создания:</strong> {{ task.createdAt }}</p>
+            <p v-if="task.lastEditedAt"><strong>Последнее редактирование:</strong> {{ task.lastEditedAt }}</p>
+            <p v-if="task.returnReason"><strong>Причина возврата:</strong> {{ task.returnReason }}</p>
+            <p><strong>Заголовок:</strong> {{ task.title }}</p>
+            <p><strong>Описание:</strong> {{ task.description }}</p>
+            <p><strong>Дедлайн:</strong> {{ task.deadline }}</p>
+            <button @click="moveToTesting(index)">Переместить на тестирование</button>
+            <button @click="startEdit(index, inProgressTasks)">Редактировать</button>
+            <button @click="deleteTask(index, inProgressTasks)">Удалить</button>
+        </div>
+    </div>
+    <div class="column">
+        <h2>Тестирование</h2>
+        <div class="task" v-for="(task, index) in testingTasks" :key="index">
+            <p><strong>Дата создания:</strong> {{ task.createdAt }}</p>
+            <p><strong>Заголовок:</strong> {{ task.title }}</p>
+            <p><strong>Описание:</strong> {{ task.description }}</p>
+            <p><strong>Дедлайн:</strong> {{ task.deadline }}</p>
+            <button @click="openReturnForm(index)">Вернуть в работу</button>
+            <button @click="moveToCompleted(index)">Переместить в выполненные</button>
+        </div>
+        <form v-if="showReturnForm" @submit.prevent="returnTaskToInProgress">
+            <label for="reason">Причина возврата:</label>
+            <textarea id="reason" v-model="returnReason" required></textarea>
+            <button type="submit">Подтвердить</button>
+            <button type="button" @click="closeReturnForm()">Отмена</button>
+        </form>
+    </div>
+    <div class="column">
+        <h2>Выполненные задачи</h2>
+        <div class="task" v-for="(task, index) in completedTasks" :key="index">
+            <p><strong>Дата создания:</strong> {{ task.createdAt }}</p>
+            <p><strong>Заголовок:</strong> {{ task.title }}</p>
+            <p><strong>Описание:</strong> {{ task.description }}</p>
+            <p><strong>Дедлайн:</strong> {{ task.deadline }}</p>
+            <p><strong>Статус:</strong> {{ task.status }}</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
