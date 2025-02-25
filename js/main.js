@@ -17,44 +17,7 @@ new Vue({
         testingTasks: [], // Тестирование
         completedTasks: [] // Выполненные задачи
     },
-    methods: {
-        openForm() {
-            this.showForm = true;
-        },
-        closeForm() {
-            this.showForm = false;
-            this.newTask = { title: '', description: '', deadline: '' };
-        },
-        addTask() {
-            const newTask = {
-                title: this.newTask.title,
-                description: this.newTask.description,
-                deadline: this.newTask.deadline,
-                createdAt: new Date().toLocaleString(),
-                lastEditedAt: null
-            };
-            this.tasks.push(newTask);
-            this.saveData();
-            this.closeForm();
-        },
-        deleteTask(index, array) {
-            array.splice(index, 1);
-            this.saveData();
-        },
-        startEdit(index, array) {
-            this.editIndex = index;
-            this.currentArray = array;
-            this.newTask = { ...array[index] }; // копируем текущую задачу для редактирования
-        },
-        saveEdit() {
-            if (this.editIndex !== null && this.currentArray) {
-                const task = this.currentArray[this.editIndex];
-                if (task) {
-                    task.title = this.newTask.title;
-                    task.description = this.newTask.description;
-                    task.deadline = this.newTask.deadline;
-                    task.lastEditedAt = new Date().toLocaleString();
-                }
+          }
             }
             this.cancelEdit();
             this.saveData();
