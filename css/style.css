@@ -89,3 +89,7 @@ input[type="date"] {
 .task button:hover {
     background-color: #c82333;
 }
+
+.task.overdue {
+    background-color: #ffcccc;
+}

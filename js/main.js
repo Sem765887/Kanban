@@ -26,6 +26,10 @@ new Vue({
             this.newTask = { title: '', description: '', deadline: '' };
         },
         addTask() {
+            if (this.isWeekend(this.newTask.deadline)) {
+                alert('Нельзя установить дедлайн в субботу или воскресенье.');
+                return;
+            }
             const newTask = {
                 title: this.newTask.title,
                 description: this.newTask.description,
@@ -47,6 +51,10 @@ new Vue({
             this.newTask = { ...array[index] };
         },
         saveEdit() {
+            if (this.isWeekend(this.newTask.deadline)) {
+                alert('Нельзя установить дедлайн в субботу или воскресенье.');
+                return;
+            }
             if (this.editIndex !== null && this.currentArray) {
                 const task = this.currentArray[this.editIndex];
                 if (task) {
@@ -118,7 +126,16 @@ new Vue({
             this.inProgressTasks = JSON.parse(localStorage.getItem('inProgressTasks')) || [];
             this.testingTasks = JSON.parse(localStorage.getItem('testingTasks')) || [];
             this.completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || [];
-        }
+        },
+        isOverdue(deadline) {
+            const deadlineDate = new Date(deadline);
+            const currentDate = new Date();
+            return deadlineDate < currentDate;
+        },
+        isWeekend(date) {
+            const day = new Date(date).getDay();
+            return day === 0 || day === 6;
+        },
     },
     created() {
         this.loadData();
