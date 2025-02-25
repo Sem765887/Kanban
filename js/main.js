@@ -37,10 +37,7 @@ new Vue({
             this.saveData();
             this.closeForm();
         },
-        deleteTask(index, array) {
-            array.splice(index, 1);
-            this.saveData();
-        },
+
         startEdit(index, array) {
             this.editIndex = index;
             this.currentArray = array;
@@ -72,7 +69,18 @@ new Vue({
             this.showReturnForm = false;
             this.returnReason = '';
         },
-
+        returnTaskToInProgress() {
+            const task = this.testingTasks[this.returnIndex];
+            if (task) {
+                task.returnReason = this.returnReason;
+                task.status = 'Возвращено в работу';
+                task.lastEditedAt = new Date().toLocaleString();
+                this.inProgressTasks.push(task);
+                this.testingTasks.splice(this.returnIndex, 1);
+            }
+            this.closeReturnForm();
+            this.saveData();
+        },
         moveToPlanned(index) {
             const task = this.tasks.splice(index, 1)[0];
             this.plannedTasks.push(task);
