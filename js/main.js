@@ -64,40 +64,7 @@ new Vue({
             this.currentArray = null;
             this.newTask = { title: '', description: '', deadline: '' };
         },
-        openReturnForm(index) {
-            this.returnIndex = index;
-            this.showReturnForm = true;
-        },
-        closeReturnForm() {
-            this.showReturnForm = false;
-            this.returnReason = '';
-        },
-        returnTaskToInProgress() {
-            const task = this.testingTasks[this.returnIndex];
-            if (task) {
-                task.returnReason = this.returnReason;
-                task.status = 'Возвращено в работу';
-                task.lastEditedAt = new Date().toLocaleString();
-                this.inProgressTasks.push(task);
-                this.testingTasks.splice(this.returnIndex, 1);
-            }
-            this.closeReturnForm();
-            this.saveData();
-        },
-        moveToPlanned(index) {
-            const task = this.tasks.splice(index, 1)[0];
-            this.plannedTasks.push(task);
-            this.saveData();
-        },
-        moveToInProgress(index) {
-            const task = this.plannedTasks.splice(index, 1)[0];
-            this.inProgressTasks.push(task);
-            this.saveData();
-        },
-        moveToTesting(index) {
-            const task = this.inProgressTasks.splice(index, 1)[0];
-            this.testingTasks.push(task);
-            this.saveData();
+
         },
         moveToCompleted(index) {
             const task = this.testingTasks.splice(index, 1)[0];
