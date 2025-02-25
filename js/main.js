@@ -14,7 +14,8 @@ new Vue({
         tasks: [],
         plannedTasks: [],
         inProgressTasks: [],
-      completedTasks: []
+        testingTasks: [],
+        completedTasks: []
     },
     methods: {
         openForm() {
