@@ -12,16 +12,7 @@
     <div class="column">
         <h2>Задачи</h2>
         <button @click="openForm()">Добавить карточку</button>
-        <form v-if="showForm" @submit.prevent="addTask">
-            <label for="title">Заголовок:</label>
-            <input type="text" id="title" v-model="newTask.title" required>
-            <label for="description">Описание:</label>
-            <textarea id="description" v-model="newTask.description" required></textarea>
-            <label for="deadline">Дедлайн:</label>
-            <input type="date" id="deadline" v-model="newTask.deadline" required>
-            <button type="submit">Создать задачу</button>
-            <button type="button" @click="closeForm()">Отмена</button>
-        </form>
+
         <form v-if="editIndex !== null" @submit.prevent="saveEdit">
             <label for="title-new">Заголовок:</label>
             <input type="text" id="title-new" v-model="newTask.title" required>
