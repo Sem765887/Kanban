@@ -72,20 +72,28 @@ new Vue({
             this.showReturnForm = false;
             this.returnReason = '';
         },
-        returnTaskToInProgress() {
-            const task = this.testingTasks[this.returnIndex];
-            if (task) {
-                task.returnReason = this.returnReason;
-                task.status = 'Возвращено в работу';
-                task.lastEditedAt = new Date().toLocaleString();
-                this.inProgressTasks.push(task);
-                this.testingTasks.splice(this.returnIndex, 1);
-            }
-            this.closeReturnForm();
+
+        moveToPlanned(index) {
+            const task = this.tasks.splice(index, 1)[0];
+            this.plannedTasks.push(task);
             this.saveData();
         },
-        moveToPlanned(index) {
-
+        moveToInProgress(index) {
+            const task = this.plannedTasks.splice(index, 1)[0];
+            this.inProgressTasks.push(task);
+            this.saveData();
+        },
+        moveToTesting(index) {
+            const task = this.inProgressTasks.splice(index, 1)[0];
+            this.testingTasks.push(task);
+            this.saveData();
+        },
+        moveToCompleted(index) {
+            const task = this.testingTasks.splice(index, 1)[0];
+            task.status = 'Выполнено';
+            this.completedTasks.push(task);
+            this.saveData();
+        },
         saveData() {
             localStorage.setItem('tasks', JSON.stringify(this.tasks));
             localStorage.setItem('plannedTasks', JSON.stringify(this.plannedTasks));
